@@ -1,0 +1,43 @@
+:root {
+    --pri: teal;
+    --sec: lightblue;
+    --ter: purple;
+    --text: white;
+    --back: black;
+  }
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--back);
+    border-radius: 10%;
+    margin: 0px;
+    border: 10px solid var(--sec);
+    padding: 10px solid var(--pri);
+    color: var(--text);
+  }
+  
+  header {
+    text-align: center;
+    color: var(--text);
+  }
+
+  h1 {
+    margin: 0px;
+    background-color: var(--pri);
+  }
+
+  h2 {
+    margin: 0px;
+    background-color: var(--ter);
+  }
+
+  .bigbox {
+    background-color: var(--sec);
+  }
+  
+  h3 {
+    text-align: center;
+    color: var(--text);
+  }

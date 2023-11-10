@@ -29,13 +29,9 @@ THEN I can save my initials and my score
  --choose topic, write questions
 
  --add functionality in javascript
-   --set up timer
-    --incorrect answeres decrease time left
     --game ends when time reaches 0
  --answers tied to buttons
-    --user answers are checked against correct answers
-    --incorrect answers decrease the time left
-    --answers given reveal the correct answer and advance quiz to next page after a set time delay
+    --answers advance quiz to next page after a set time delay
  --game ends when all questions are answered
     --users receive a score which is equal to the time left when all questions are answered
  --user can save initial and score when game is over
