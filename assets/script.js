@@ -8,28 +8,39 @@ var startBtn = document.querySelector("#start");
 var questBox = document.querySelector("#question");
 var smolbox = document.getElementById('smolbox');
 var answerBox = document.getElementById('answer');
+var scoreBox = document.getElementById("#score");
 
 //event listeners for all the buttons. first one tells the start button to keep time and display the questions
-startBtn.addEventListener("click", keepTime);
+startBtn.addEventListener("click", keepTime)
 startBtn.addEventListener("click", displayQuestion) //excercise that makes things disappear
-smolbox.addEventListener("click", checkAnswer);
+smolbox.addEventListener("click", checkAnswer)
 // var highscore = document.getElementById('highscore');
 
 //sets up timer
 var timer = document.querySelector(".time");
 
-var timeLeft = 30;
+var timeLeft = 10;
+var score = timeLeft;
+var timeInterval;
 
 function keepTime() {
-    var timeInterval = setInterval(function () {
+    timeInterval = setInterval(function () {
         timeLeft--;
         timer.textContent = timeLeft + " seconds left.";
 
         if (timeLeft === 0) {
             clearInterval(timeInterval);
-            displayMessage();
+            // displayMessage();
         }
     }, 1000);
+}
+
+function stopTime() { }
+//function to stop the timer and display the remaining time as the score
+function getScore() {
+
+    window.location.assign('highscore.html');
+    scoreBox.setAttribute('string', scoreBox);
 }
 
 //variables for questions
@@ -37,20 +48,25 @@ q1 = "first question";
 q2 = "second question";
 
 //object with question details
-var questions = [{question: q1,
-answers: ['no', 'yes', 'maybe', 'ok'],
-correct: 1}, {question: q2,
+var questions = [{
+    question: q1,
+    answers: ['no', 'yes', 'maybe', 'ok'],
+    correct: 1
+}, {
+    question: q2,
     answers: ['idk', 'i guess', 'no way', 'yuh'],
-    correct: 2}]
+    correct: 2
+}]
 
 //establishes position in object as 0
 var position = 0
 
-//function to display a question at the position established by the position variable
+//function to display a question at the position established by the position variable and remove the start button display on click
 function displayQuestion() {
     smolbox.innerHTML = '';
     questBox.textContent = questions[position].question;
-    displayAnswers() 
+    startBtn.style.display = 'none';
+    displayAnswers()
 }
 
 //function to display the answers as buttons, increasing the index at each iteration
@@ -74,8 +90,9 @@ function displayAnswers() {
 function checkAnswer(event) {
     var button = event.target;
     var index = button.getAttribute('data-index');
+
     console.log(index)
-    if(index == questions[position].correct){
+    if (index == questions[position].correct) {
         answerBox.textContent = "correct";
     } else {
         answerBox.textContent = "incorrect";
@@ -85,12 +102,35 @@ function checkAnswer(event) {
     }
     position++;
     if (position == questions.length) {
-        //endgame to input high score
+        clearInterval(timeInterval);
+        getScore();
     }
     displayQuestion();
 }
 
+// function endGame(event) {
+//     var startBtn = event.target;
+//     var startState = startBtn.getAttribute('data-state')
+
+//     if (startState === 'visible') {
+//         startBtn.textContent='';
+//         startBtn.setAttribute('data-state', 'hidden')
+//     }
+// }
+
+//  DONE    make start button go away
+//  DONE    stop timer at end
+//  KEEP IT SIMPLE, KEEP EVERYTHING ON ONE PAGE     add view high scores button on home screen
+//  NOPE    opens the high score screen
+//set up end game:
+//      tie timeLeft to score
+//      display final score
+//      display text field for initials
+//      display save high score button
+//              save high score button saves the score AND
+//              returns to start game screen
+
 // var score = timeLeft;
 // function displayMessage() {
-    // displays score and high score input form or a button to go to that
+// displays score and high score input form or a button to go to that
 // }
