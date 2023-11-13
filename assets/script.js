@@ -5,19 +5,20 @@
 
 //set up variables that reference elements in the html file
 var startBtn = document.querySelector("#start");
-var questBox = document.querySelector("#question");
+var questbox = document.querySelector("#question");
 var smolbox = document.getElementById('smolbox');
-var answerBox = document.getElementById('answer');
+var answerbox = document.getElementById('answer');
 var submitBtn = document.querySelector('#submit');
 var initialbox = document.querySelector('#initial');
-var scorebox = document.querySelector('highscores')
+var scorebox = document.querySelector('#highscores')
 
 
 //event listeners for all the buttons. first one tells the start button to keep time and display the questions
-startBtn.addEventListener("click", keepTime)
-startBtn.addEventListener("click", displayQuestion) //excercise that makes things disappear
+startBtn.addEventListener("click", function () {
+    keepTime();
+    displayQuestion();
+});
 smolbox.addEventListener("click", checkAnswer)
-// submitBtn.addEventListener("click", submitScore)
 
 
 //sets up timer
@@ -37,7 +38,8 @@ function keepTime() {
 
         if (timeLeft === 0) {
             clearInterval(timeInterval);
-            timer.textContent = "yr score is " + timeLeft;
+            timer.textContent = "yr score is 0";
+            reset();
         }
     }, 1000);
 }
@@ -45,16 +47,16 @@ function keepTime() {
 //function to stop the timer and display the remaining time as the score
 
 //variables for questions
-q1 = "first question";
-q2 = "second question";
+// q1 = "first question";
+// q2 = "second question";
 
 //object with question details
 var questions = [{
-    question: q1,
+    question: "first question",
     answers: ['no', 'yes', 'maybe', 'ok'],
     correct: 1
 }, {
-    question: q2,
+    question: "second question",
     answers: ['idk', 'i guess', 'no way', 'yuh'],
     correct: 2
 }]
@@ -64,8 +66,9 @@ var position = 0
 
 //function to display a question at the position established by the position variable and remove the start button display on click
 function displayQuestion() {
+    questions.position = 0
     smolbox.innerHTML = '';
-    questBox.textContent = questions[position].question;
+    questbox.textContent = questions[position].question;
     startBtn.style.display = 'none';
     displayAnswers()
 }
@@ -93,20 +96,24 @@ function checkAnswer(event) {
     var index = button.getAttribute('data-index');
 
     if (index == questions[position].correct) {
-        answerBox.textContent = "correct";
+        answerbox.textContent = "correct";
     } else {
-        answerBox.textContent = "incorrect";
+        answerbox.textContent = "incorrect";
         timeLeft--;
         timeLeft--;
         timer.textContent = timeLeft + " seconds left.";
     }
     position++;
-    if (position == questions.length) {
+    if (position >= questions.length) {
         clearInterval(timeInterval);
         timer.textContent = "yr score is " + timeLeft;
         submitScore();
+        // position = 0;
+        // timeLeft = 10;
+        // answerbox.textContent = "";
+    } else {
+        displayQuestion();
     }
-    displayQuestion();
 }
 
 function displayMessage() {
@@ -114,27 +121,44 @@ function displayMessage() {
     submitScore();
 }
 
-function submitScore() {
+var scores = [{
+    userInitial: "",
+    userScore: score
+}]
 
+function submitScore() {
     var name = prompt("Enter yr initials", "");
+    var score = timeLeft;
 
     if (name === "") {
         displayMessage();
-        
+
     } else {
         localStorage.setItem("initial", name);
-        localStorage.setItem("highscore", score);
+        localStorage.setItem("score", score);
         showScore();
+        startBtn.style.display = 'initial';
     }
 }
 
 function showScore() {
+
     var name = localStorage.getItem("initial");
-    var score = localStorage.getItem("highscore");
+    var score = localStorage.getItem("score");
 
     initialdisplay.textContent = "name: " + name + "    " + score;
+    reset();
     // scoredisplay.textContent = scoreVal;
 }
+
+function reset() {
+    position = 0;
+    timeLeft = 11;
+    questbox.textContent = "";
+    smolbox.textContent = "";
+    answerbox.textContent = "";
+}
+
 
 // function nameInput() {
 //     var initialField = document.createElement("input");
@@ -154,9 +178,9 @@ function showScore() {
 //  DONE    reformat score and highscore boxes in html
 //set up end game:
 //  DONE    tie timeLeft to score
-//  DONE    display final score
-//      display text field for initials
-//      display save high score button
+//      display final score
+//  DONE    display text field for initials
+//  DONE    display save high score button
 //              save high score button saves the score AND
 //              returns to start game screen
 
