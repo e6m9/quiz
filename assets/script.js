@@ -1,37 +1,40 @@
-//take inventory of what you have, whenever you start something new
-//don't forget object, array, 
-// var bigbox = document.getElementById('bigbox');
-// var quest = document.querySelector(".question");
-
 //set up variables that reference elements in the html file
 var startBtn = document.querySelector("#start");
+var viewBtn = document.querySelector("#viewscores");
 var questbox = document.querySelector("#question");
 var smolbox = document.getElementById('smolbox');
 var answerbox = document.getElementById('answer');
 var submitBtn = document.querySelector('#submit');
 var initialbox = document.querySelector('#initial');
-var scorebox = document.querySelector('#highscores')
+var scorebox = document.querySelector('#scorebox')
 
 
-//event listeners for all the buttons. first one tells the start button to keep time and display the questions
+//event listeners for all the buttons. first one tells the start button to keep time and display the questions, the second tells the buttons generated in smolbox to check the given answer, and the third acts as a toggle for the score list attached to the view scores button
 startBtn.addEventListener("click", function () {
     keepTime();
     displayQuestion();
 });
 smolbox.addEventListener("click", checkAnswer)
+viewBtn.addEventListener("click", function() {
+    var scoreList = document.getElementById('scoredisplay');
 
+    if (scoreList.style.display === 'block') {
+        scoreList.style.display = 'none';
+    } else {
+        scoreList.style.display = 'block';
+    }
+});
 
-//sets up timer
+//sets up the timer and tells it to give the user a score of 0 when time runs out and bypasses the submitScore function
 var timer = document.querySelector(".time");
 
-var timeLeft = 10;
+var timeLeft = 30;
 var score = timeLeft;
 var timeInterval;
-// var savedScore = score + 
-
-//just name a value outside of a function, use this to try to get the create text field thing to work with the rest
 
 function keepTime() {
+    timer.textContent = timeLeft + " seconds left.";
+
     timeInterval = setInterval(function () {
         timeLeft--;
         timer.textContent = timeLeft + " seconds left.";
@@ -44,13 +47,7 @@ function keepTime() {
     }, 1000);
 }
 
-//function to stop the timer and display the remaining time as the score
-
-//variables for questions
-// q1 = "first question";
-// q2 = "second question";
-
-//object with question details
+//object with question details including an array for the answers and an index value for the correct answer
 var questions = [{
     question: "first question",
     answers: ['no', 'yes', 'maybe', 'ok'],
@@ -64,7 +61,7 @@ var questions = [{
 //establishes position in object as 0
 var position = 0
 
-//function to display a question at the position established by the position variable and remove the start button display on click
+//function to display a question at the position established by the position variable along with its possible answers and remove the start button display on click
 function displayQuestion() {
     questions.position = 0
     smolbox.innerHTML = '';
@@ -90,7 +87,7 @@ function displayAnswers() {
 
 //function to check answer is set to an event on the answer buttons to check if the answer chosen matches the correct answer set in the questions object
 //if the answer is correct, the index position is pushed forward, if the answer is incorrect, two seconds are decreased from the time left
-//if position exceeds the length of the questions object, then it ends the game
+//if position exceeds or is equal to the length of the questions object, then it ends the game by displaying the score and, after a moment, runs submitScore
 function checkAnswer(event) {
     var button = event.target;
     var index = button.getAttribute('data-index');
@@ -107,25 +104,15 @@ function checkAnswer(event) {
     if (position >= questions.length) {
         clearInterval(timeInterval);
         timer.textContent = "yr score is " + timeLeft;
-        submitScore();
-        // position = 0;
-        // timeLeft = 10;
-        // answerbox.textContent = "";
+        
+        setTimeout(submitScore, 1000);
     } else {
         displayQuestion();
     }
 }
 
-function displayMessage() {
-    alert("plz enter yr initials!");
-    submitScore();
-}
-
-var scores = [{
-    userInitial: "",
-    userScore: score
-}]
-
+//function to submit scores by checking if a string was entered, if not, it runs displayMessage which returns to submitScore, if a string was entered, the function checks if a score already exists and then puts into into local storage where the name and score are split before and then later rejoined as a distinct item in the array for later display
+//the start button is told to reappear, show scores is run to initialize the scoreboard, and the reset function is called to reset all the display parts
 function submitScore() {
     var name = prompt("Enter yr initials", "");
     var score = timeLeft;
@@ -134,57 +121,61 @@ function submitScore() {
         displayMessage();
 
     } else {
-        localStorage.setItem("initial", name);
-        localStorage.setItem("score", score);
-        showScore();
+        var oldScores = localStorage.getItem("scores");
+        var scoresArray;
+
+        if (oldScores) {
+            scoresArray = oldScores.split(',');
+        } else {
+            scoresArray = [];
+        }
+        scoresArray.push(name + ":" + score);
+
+        localStorage.setItem("scores", scoresArray.join(','));
+
         startBtn.style.display = 'initial';
+        
     }
-}
-
-function showScore() {
-
-    var name = localStorage.getItem("initial");
-    var score = localStorage.getItem("score");
-
-    initialdisplay.textContent = "name: " + name + "    " + score;
+    showScore();
     reset();
-    // scoredisplay.textContent = scoreVal;
 }
 
+//an alert to ask you to please enter your initials
+function displayMessage() {
+    alert("plz enter yr initials!");
+    submitScore();
+}
+
+//function to pull the matching scores and initials from localStorage, parsing them and fitting each one backtogether to display as new list items inside scoredisplay
+function showScore() {
+    var oldScores = localStorage.getItem("scores") || "";
+    var scoresArray;
+
+    if (oldScores) {
+        scoresArray = oldScores.split(',');
+    } else {
+        scoresArray = [];
+    }
+
+    var scoreList = document.getElementById('scoredisplay');
+
+    scoreList.innerHTML = '';
+
+    scoresArray.forEach(function (scoreString) {
+        var [name, score] = scoreString.split(':');
+
+        var scoreEntry = document.createElement('li');
+        scoreEntry.textContent = name + "   " + score;
+
+        scoreList.appendChild(scoreEntry);
+    });
+}
+
+//function to reset all the moving parts including the position of the index in the questions object and the timer
 function reset() {
     position = 0;
-    timeLeft = 11;
+    timeLeft = 30;
     questbox.textContent = "";
     smolbox.textContent = "";
     answerbox.textContent = "";
 }
-
-
-// function nameInput() {
-//     var initialField = document.createElement("input");
-//         initialField.setAttribute("type", "text");
-//         initialField.setAttribute("value", "");
-//         initialbox.appendChild(initialField);
-// }
-
-
-//use this for what happens when the submit button is pressed
-//startBtn.style.display = 'initial';
-
-//  DONE    make start button go away
-//  DONE    stop timer at end
-//  KEEP IT SIMPLE, KEEP EVERYTHING ON ONE PAGE     add view high scores button on home screen
-//  NOPE    opens the high score screen
-//  DONE    reformat score and highscore boxes in html
-//set up end game:
-//  DONE    tie timeLeft to score
-//      display final score
-//  DONE    display text field for initials
-//  DONE    display save high score button
-//              save high score button saves the score AND
-//              returns to start game screen
-
-// var score = timeLeft;
-// function displayMessage() {
-// displays score and high score input form or a button to go to that
-// }
