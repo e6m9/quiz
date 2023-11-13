@@ -17,7 +17,7 @@ var scorebox = document.querySelector('highscores')
 startBtn.addEventListener("click", keepTime)
 startBtn.addEventListener("click", displayQuestion) //excercise that makes things disappear
 smolbox.addEventListener("click", checkAnswer)
-submitBtn.addEventListener("click", submitScore)
+// submitBtn.addEventListener("click", submitScore)
 
 
 //sets up timer
@@ -104,33 +104,36 @@ function checkAnswer(event) {
     if (position == questions.length) {
         clearInterval(timeInterval);
         timer.textContent = "yr score is " + timeLeft;
-
+        submitScore();
     }
     displayQuestion();
 }
 
+function displayMessage() {
+    alert("plz enter yr initials!");
+    submitScore();
+}
 
-function submitScore(event) {
-    event.preventDefault();
+function submitScore() {
 
-    var name = initialbox.value;
-    var scoreVal = score;
+    var name = prompt("Enter yr initials", "");
 
-    localStorage.setItem("initial", name);
-    localStorage.setItem("highscore", scoreVal);
-    showScore();
+    if (name === "") {
+        displayMessage();
+        
+    } else {
+        localStorage.setItem("initial", name);
+        localStorage.setItem("highscore", score);
+        showScore();
+    }
 }
 
 function showScore() {
     var name = localStorage.getItem("initial");
-    var scoreVal = localStorage.getItem("highscore");
+    var score = localStorage.getItem("highscore");
 
-    if (!name) {
-        return;
-    }
-
-    initialdisplay.textContent = "name: " + name;
-    scoredisplay.textContent = "score: " + scoreVal;
+    initialdisplay.textContent = "name: " + name + "    " + score;
+    // scoredisplay.textContent = scoreVal;
 }
 
 // function nameInput() {
