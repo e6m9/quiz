@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --pri: teal;
     --sec: lightblue;
     --ter: purple;
@@ -32,12 +32,8 @@
     margin: 0px;
     background-color: var(--ter);
   }
-
-  .bigbox {
-    background-color: var(--sec);
-  }
   
   h3 {
     text-align: center;
     color: var(--text);
-  }
+  } */

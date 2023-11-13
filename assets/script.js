@@ -8,13 +8,17 @@ var startBtn = document.querySelector("#start");
 var questBox = document.querySelector("#question");
 var smolbox = document.getElementById('smolbox');
 var answerBox = document.getElementById('answer');
-var scoreBox = document.getElementById("#score");
+var submitBtn = document.querySelector('#submit');
+var initialbox = document.querySelector('#initial');
+var scorebox = document.querySelector('highscores')
+
 
 //event listeners for all the buttons. first one tells the start button to keep time and display the questions
 startBtn.addEventListener("click", keepTime)
 startBtn.addEventListener("click", displayQuestion) //excercise that makes things disappear
 smolbox.addEventListener("click", checkAnswer)
-// var highscore = document.getElementById('highscore');
+submitBtn.addEventListener("click", submitScore)
+
 
 //sets up timer
 var timer = document.querySelector(".time");
@@ -22,6 +26,9 @@ var timer = document.querySelector(".time");
 var timeLeft = 10;
 var score = timeLeft;
 var timeInterval;
+// var savedScore = score + 
+
+//just name a value outside of a function, use this to try to get the create text field thing to work with the rest
 
 function keepTime() {
     timeInterval = setInterval(function () {
@@ -30,18 +37,12 @@ function keepTime() {
 
         if (timeLeft === 0) {
             clearInterval(timeInterval);
-            // displayMessage();
+            timer.textContent = "yr score is " + timeLeft;
         }
     }, 1000);
 }
 
-function stopTime() { }
 //function to stop the timer and display the remaining time as the score
-function getScore() {
-
-    window.location.assign('highscore.html');
-    scoreBox.setAttribute('string', scoreBox);
-}
 
 //variables for questions
 q1 = "first question";
@@ -91,7 +92,6 @@ function checkAnswer(event) {
     var button = event.target;
     var index = button.getAttribute('data-index');
 
-    console.log(index)
     if (index == questions[position].correct) {
         answerBox.textContent = "correct";
     } else {
@@ -103,28 +103,55 @@ function checkAnswer(event) {
     position++;
     if (position == questions.length) {
         clearInterval(timeInterval);
-        getScore();
+        timer.textContent = "yr score is " + timeLeft;
+
     }
     displayQuestion();
 }
 
-// function endGame(event) {
-//     var startBtn = event.target;
-//     var startState = startBtn.getAttribute('data-state')
 
-//     if (startState === 'visible') {
-//         startBtn.textContent='';
-//         startBtn.setAttribute('data-state', 'hidden')
-//     }
+function submitScore(event) {
+    event.preventDefault();
+
+    var name = initialbox.value;
+    var scoreVal = score;
+
+    localStorage.setItem("initial", name);
+    localStorage.setItem("highscore", scoreVal);
+    showScore();
+}
+
+function showScore() {
+    var name = localStorage.getItem("initial");
+    var scoreVal = localStorage.getItem("highscore");
+
+    if (!name) {
+        return;
+    }
+
+    initialdisplay.textContent = "name: " + name;
+    scoredisplay.textContent = "score: " + scoreVal;
+}
+
+// function nameInput() {
+//     var initialField = document.createElement("input");
+//         initialField.setAttribute("type", "text");
+//         initialField.setAttribute("value", "");
+//         initialbox.appendChild(initialField);
 // }
+
+
+//use this for what happens when the submit button is pressed
+//startBtn.style.display = 'initial';
 
 //  DONE    make start button go away
 //  DONE    stop timer at end
 //  KEEP IT SIMPLE, KEEP EVERYTHING ON ONE PAGE     add view high scores button on home screen
 //  NOPE    opens the high score screen
+//  DONE    reformat score and highscore boxes in html
 //set up end game:
-//      tie timeLeft to score
-//      display final score
+//  DONE    tie timeLeft to score
+//  DONE    display final score
 //      display text field for initials
 //      display save high score button
 //              save high score button saves the score AND

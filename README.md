@@ -19,13 +19,6 @@ THEN the game is over
 WHEN the game is over
 THEN I can save my initials and my score
 
- --create elements in html
-    --start button
-    --question box
-    --high score box
-    --timer box
-
-
  --choose topic, write questions
 
  --add functionality in javascript
@@ -39,3 +32,5 @@ THEN I can save my initials and my score
     --questions reset upon game restart
 
  --make pretty with CSS (optional)
+
+ add screenshots directly to README, not as links.
