@@ -1,39 +1,104 @@
-/* :root {
-    --pri: teal;
-    --sec: lightblue;
-    --ter: purple;
-    --text: white;
-    --back: black;
-  }
-  * {
-    box-sizing: border-box;
-  }
+:root {
+  --pri: teal;
+  --sec: lightblue;
+  --ter: purple;
+  --text: white;
+  --back: black;
+}
 
-  body {
-    background-color: var(--back);
-    border-radius: 10%;
-    margin: 0px;
-    border: 10px solid var(--sec);
-    padding: 10px solid var(--pri);
-    color: var(--text);
-  }
-  
-  header {
-    text-align: center;
-    color: var(--text);
-  }
+* {
+  box-sizing: border-box;
+}
 
-  h1 {
-    margin: 0px;
-    background-color: var(--pri);
-  }
+body {
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  background-color: var(--back);
+  margin: 0px;
+  color: var(--text);
+}
 
-  h2 {
-    margin: 0px;
-    background-color: var(--ter);
-  }
-  
-  h3 {
-    text-align: center;
-    color: var(--text);
-  } */
+container {
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  text-align: center;
+  color: var(--text);
+}
+
+h1 {
+  margin: 0px;
+  background-color: var(--pri);
+}
+
+h2 {
+  margin: 0px;
+  background-color: var(--ter);
+}
+
+h3 {
+  text-align: center;
+}
+
+#interactive {
+  text-align: center;
+  border: 10px solid var(--sec);
+  border-bottom-left-radius: 10%;
+  border-bottom-right-radius: 10%;
+}
+
+.answerbuttonsbox {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+  padding-bottom: 20px;
+}
+
+.answer-button {
+  background-color: var(--sec);
+  border: none;
+  color: var(--back);
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+.answerbox
+.buttons {
+  line-height: 1.5;
+  flex-direction: column;
+}
+
+#answer {
+  font-size: 24px;
+}
+
+#start,
+#viewscores {
+  background-color: var(--pri);
+  color: var(--text);
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+#display,
+#scorebox {
+  text-align: center;
+  margin-top: 20px;
+}
+
+#scorebox {
+  border: 10px solid var(--ter);
+  padding: 10px;
+  font-size: 20px;
+  border-bottom-left-radius: 10%;
+  border-bottom-right-radius: 10%;
+}
+
+ul {
+  list-style-type: none;
+}

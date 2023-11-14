@@ -15,7 +15,7 @@ startBtn.addEventListener("click", function () {
     displayQuestion();
 });
 smolbox.addEventListener("click", checkAnswer)
-viewBtn.addEventListener("click", function() {
+viewBtn.addEventListener("click", function () {
     var scoreList = document.getElementById('scoredisplay');
 
     if (scoreList.style.display === 'block') {
@@ -49,13 +49,21 @@ function keepTime() {
 
 //object with question details including an array for the answers and an index value for the correct answer
 var questions = [{
-    question: "first question",
-    answers: ['no', 'yes', 'maybe', 'ok'],
+    question: "Which of the following are one of the founding bands of Industrial Music?",
+    answers: ['Nine Inch Nails', 'Throbbing Gristle', 'Skinny Puppy', 'Rammstein'],
     correct: 1
 }, {
-    question: "second question",
-    answers: ['idk', 'i guess', 'no way', 'yuh'],
+    question: "Which of these were common instruments in early Industrial music?",
+    answers: ['Guitars, Bass, and Drums', 'Trombones and horned instruments', 'Tape loops, junk, and homemade instruments', 'turntables and keyboards'],
     correct: 2
+}, {
+    question: "Which of the following are subgenres of Industrial or Post-Industrial Music?",
+    answers: ['Electroclash', 'Noisegrind', 'Chamber Pop', 'Power Electronics'],
+    correct: 3
+}, {
+    question: "What year was Industrial Records founded?",
+    answers: ['1976', '1949', '1917', '1988'],
+    correct: 0
 }]
 
 //establishes position in object as 0
@@ -66,6 +74,7 @@ function displayQuestion() {
     questions.position = 0
     smolbox.innerHTML = '';
     questbox.textContent = questions[position].question;
+    viewBtn.style.display = 'none';
     startBtn.style.display = 'none';
     displayAnswers()
 }
@@ -74,13 +83,14 @@ function displayQuestion() {
 //the index starts at 0, as long as the index is less than the length of the answers element of the questions object
 //answer button variable is a button
 //the text content of the answerbutton is determined by the position of the index of the answers element fo the questions object
-//the attribute of the answer button is set to the data index by the current index positio.normalize
+//the attribute of the answer button is set to the data index by the current index position.
 //smolbox is appended with the details of variable, answerButton
 function displayAnswers() {
     for (let index = 0; index < questions[position].answers.length; index++) {
         var answerButton = document.createElement('button');
         answerButton.textContent = questions[position].answers[index];
         answerButton.setAttribute('data-index', index);
+        answerButton.classList.add('answer-button');
         smolbox.appendChild(answerButton)
     }
 }
@@ -104,15 +114,14 @@ function checkAnswer(event) {
     if (position >= questions.length) {
         clearInterval(timeInterval);
         timer.textContent = "yr score is " + timeLeft;
-        
+
         setTimeout(submitScore, 1000);
     } else {
         displayQuestion();
     }
 }
 
-//function to submit scores by checking if a string was entered, if not, it runs displayMessage which returns to submitScore, if a string was entered, the function checks if a score already exists and then puts into into local storage where the name and score are split before and then later rejoined as a distinct item in the array for later display
-//the start button is told to reappear, show scores is run to initialize the scoreboard, and the reset function is called to reset all the display parts
+//function to submit scores by checking if a string was entered, if not, it runs displayMessage which returns to submitScore
 function submitScore() {
     var name = prompt("Enter yr initials", "");
     var score = timeLeft;
@@ -134,7 +143,7 @@ function submitScore() {
         localStorage.setItem("scores", scoresArray.join(','));
 
         startBtn.style.display = 'initial';
-        
+
     }
     showScore();
     reset();
@@ -146,7 +155,7 @@ function displayMessage() {
     submitScore();
 }
 
-//function to pull the matching scores and initials from localStorage, parsing them and fitting each one backtogether to display as new list items inside scoredisplay
+//function to pull the matching scores and initials from localStorage,
 function showScore() {
     var oldScores = localStorage.getItem("scores") || "";
     var scoresArray;
@@ -169,6 +178,8 @@ function showScore() {
 
         scoreList.appendChild(scoreEntry);
     });
+    viewBtn.style.display = 'initial';
+    scoreList.style.display = 'block';
 }
 
 //function to reset all the moving parts including the position of the index in the questions object and the timer
